@@ -1,0 +1,15 @@
+{
+  "version": "1.2.0",
+  "build": "1002000",
+  "repository": "UnityX103/ImageHarbor",
+  "minimum_macos": "13.0",
+  "mitmproxy": {
+    "version": "12.2.3",
+    "arm64_sha256": "0a09ee3b82569e8985aff8186e4792618b8e5d0c766098db093d09a87d4b013a",
+    "x86_64_sha256": "7998187f5a0d399ab796af4523d3ad830ebe690726a41bc3e1df47a8e477a641"
+  },
+  "sparkle": {
+    "version": "2.9.6",
+    "sha256": "52bf9e88cdd972fc0c81501377a880e90d47031bd8ca5462488f843e2609e192"
+  }
+}
