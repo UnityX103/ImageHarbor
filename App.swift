@@ -73,7 +73,7 @@ import ImageIO
         }
     }
     func start() {
-        guard process == nil else { return }
+        guard process == nil, !updateInstalling, pendingUpdateInstallation == nil else { return }
         guard let value = Int(port), (1024...65535).contains(value) else { captureRequested = false; message = "请输入 1024–65535 之间的端口。"; return }
         guard let resources = Bundle.main.resourceURL else { return }
         let engine = resources.appendingPathComponent("mitmproxy.app/Contents/MacOS/mitmdump")
@@ -120,6 +120,7 @@ import ImageIO
         let url = cert
         Task {
             let ready = (try? await Task.detached { try CertificateInspector.inspect(url).trusted }.value) ?? false
+            guard !updateInstalling, pendingUpdateInstallation == nil else { return }
             guard ready else { showHelp = true; return }
             captureRequested = true
             if active { launchProxyAgent(restoreOnly: false) } else { start() }
@@ -202,12 +203,14 @@ import ImageIO
         if quitPending && !needsRecovery && proxyAgent == nil { quitPending = false; NSApp.reply(toApplicationShouldTerminate: true) }
     }
     func export() {
+        guard !updateInstalling, pendingUpdateInstallation == nil else { return }
         let snapshot = images
         guard !snapshot.isEmpty else { return }
         let panel = NSOpenPanel()
         panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.canCreateDirectories = true
         panel.prompt = "导出到这里"; panel.message = "导出全部 \(snapshot.count) 张图片（搜索不会限制导出范围）"
-        guard panel.runModal() == .OK, let destination = panel.url else { return }
+        guard panel.runModal() == .OK, let destination = panel.url,
+              !updateInstalling, pendingUpdateInstallation == nil else { return }
         exporting = true
         let source = root.appendingPathComponent("images"), mode = mode
         Task {
