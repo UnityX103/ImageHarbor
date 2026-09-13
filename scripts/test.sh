@@ -16,3 +16,5 @@ if [ "${CI:-}" = "true" ]; then
   sudo -n "$BUILD/sc-integration"
 fi
 python3 -m unittest discover -s Tests -p 'test_*.py'
+
+swiftc -parse-as-library scripts/VerifyUpdate.swift -o "$BUILD/verify-update"

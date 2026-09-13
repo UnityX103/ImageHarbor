@@ -46,7 +46,7 @@ def main():
     sign = vendor/'sparkle/bin/sign_update'
     verifier = ROOT/'work/verify-update'
     verifier.parent.mkdir(exist_ok=True)
-    subprocess.run(['swiftc', str(ROOT/'scripts/VerifyUpdate.swift'), '-o', str(verifier)], check=True)
+    subprocess.run(['swiftc', '-parse-as-library', str(ROOT/'scripts/VerifyUpdate.swift'), '-o', str(verifier)], check=True)
     dest.mkdir(parents=True, exist_ok=True)
     for arch in ['arm64', 'x86_64']:
         for ext in ['dmg', 'zip']:
